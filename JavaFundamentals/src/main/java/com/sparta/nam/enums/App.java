@@ -1,9 +1,12 @@
 package com.sparta.nam.enums;
 
+import java.time.LocalDate;
+
 public class App {
 
     public static void main(String[] args) {
         Day dayOfTheWeek = Day.SUNDAY;
+
 
         if(dayOfTheWeek == Day.SATURDAY || dayOfTheWeek == Day.SUNDAY){
             System.out.println("It's the weekend");
