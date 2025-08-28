@@ -39,5 +39,21 @@ public class App {
         System.out.println(zainab.toString());
         System.out.println(zainab.hashCode());
 
+        for(Member m : members){
+            System.out.println(m.toString());
+        }
+
+        Shape rectangle = new Rectangle(5,5);
+        System.out.println(rectangle);
+
+        Shape circle = new Circle(5);
+        System.out.println(circle);
+
+        Shape[] shapes = {rectangle, circle};
+
+        for(Shape shape : shapes){
+            System.out.println(shape);
+        }
+
     }
 }

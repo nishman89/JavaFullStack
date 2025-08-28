@@ -16,13 +16,15 @@ public  class Member {
         this.joinDate = LocalDate.of(year, month, day);
     }
 
-    public static LocalDate getDate(){
-        return LocalDate.now();
-    }
+
     public Member(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.joinDate = LocalDate.now();
+    }
+
+    public static LocalDate getDate(){
+        return LocalDate.now();
     }
 //
 //    // If no constructor is in class, by defauly a paramterless contructor is put in the class
