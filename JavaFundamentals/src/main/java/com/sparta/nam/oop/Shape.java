@@ -1,7 +1,7 @@
 package com.sparta.nam.oop;
 
 // Abstract classes can have concrete and abstract methods
-public abstract class Shape {
+public abstract class Shape implements Printable {
     @Override
     public String toString(){
         return getClass().getName() + " Area: " + calculateArea();

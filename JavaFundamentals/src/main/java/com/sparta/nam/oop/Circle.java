@@ -10,4 +10,9 @@ public class Circle extends Shape {
     public int calculateArea() {
         return (int) (Math.PI * radius * radius);
     }
+
+    @Override
+    public void print() {
+        System.out.println("I am a circle");
+    }
 }

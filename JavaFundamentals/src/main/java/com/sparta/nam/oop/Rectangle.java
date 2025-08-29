@@ -13,4 +13,9 @@ public class Rectangle extends Shape{
     public int calculateArea() {
         return width * length;
     }
+
+    @Override
+    public void print() {
+        System.out.println("I am a rectabgle");
+    }
 }

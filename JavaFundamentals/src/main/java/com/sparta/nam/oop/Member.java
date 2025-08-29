@@ -3,7 +3,7 @@ package com.sparta.nam.oop;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-public  class Member {
+public  class Member implements Printable, Movable {
 
     private final String firstName;
 
@@ -50,5 +50,15 @@ public  class Member {
     @Override
     public String toString() {
         return getFullName() + " has been member for " + getMemberDays() + " days.";
+    }
+
+    @Override
+    public void print() {
+        System.out.println("I am a member");
+    }
+
+    @Override
+    public String move() {
+        return "I am moving";
     }
 }

@@ -55,5 +55,11 @@ public class App {
             System.out.println(shape);
         }
 
+        Printable[] printables = {m1, zainab, rectangle, circle};
+
+        for(Printable p : printables){
+            p.print();
+        }
+
     }
 }
