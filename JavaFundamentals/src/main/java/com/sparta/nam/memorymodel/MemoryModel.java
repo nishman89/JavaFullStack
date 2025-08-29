@@ -26,7 +26,7 @@ public class MemoryModel {
 
 
         // Part 2 - comment out part 1 and uncomment this section
-//
+
         var nish = new Person("Nish", "Mandal");
         nish.setFirstName("Nash");
         var haashim = 3.6;

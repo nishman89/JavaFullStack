@@ -1,7 +1,9 @@
 package com.sparta.nam.oop;
 
+import javax.swing.plaf.metal.MetalMenuBarUI;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 
 public  class Member implements Printable, Movable {
 
@@ -60,5 +62,17 @@ public  class Member implements Printable, Movable {
     @Override
     public String move() {
         return "I am moving";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof Member member)) return false; // check to see if obj is a member. If it is a member it will be referred to as "member"
+        // checking whether the firstname of the this object, is the same as the firstname of the the obejct we're comparing it to, same with lastname and joindate
+        return Objects.equals(firstName, member.firstName) && Objects.equals(lastName, member.lastName) && Objects.equals(joinDate, member.joinDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.firstName, this.lastName, this.joinDate);
     }
 }
