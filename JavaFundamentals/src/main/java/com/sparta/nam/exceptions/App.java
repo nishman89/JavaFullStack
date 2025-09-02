@@ -37,16 +37,30 @@ public class App {
 //        System.out.println("Program is finished");
 
 
-        try{
+        try {
             Animal myHamster = new Animal("Haashim", 2, "27-07-2022");
             Animal myRabbit = new Animal("Vineer", 1, "27-07-2022");
             Animal myOtherDog = new Animal("Dayanna", 2, "27-07-2022");
             Animal myOtherCat = new Animal("Farah", 12, "27-07-2022");
-        } catch (NullPointerException | IllegalArgumentException e){
-            System.out.println(e.getMessage());
-        } catch(ParseException e){
-            System.out.println("Date format it incorrect");
-        } finally{
+        }
+
+
+            catch (NullPointerException e) {
+                            System.out.println("Name cannot be null");
+                        }
+            catch (IllegalArgumentException e) {
+                            System.out.println("Age cannot be negative");
+                        }
+            catch (ParseException e) {
+                System.out.println("Date format is incorrect");
+            }
+            catch (RuntimeException e) {
+                System.out.println("Caught an RuntimeException object");
+            }
+            catch (Exception e) {
+                System.out.println("Caught an Exception object");
+            }
+        finally{
             System.out.println("Program is complete");
         }
     }
