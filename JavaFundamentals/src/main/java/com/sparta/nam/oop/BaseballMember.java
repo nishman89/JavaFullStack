@@ -19,6 +19,8 @@ public class BaseballMember extends Member {
 
     @Override
     public String toString() {
+        Object obj = new Object();
+
         return super.toString() + " position " + position;
     }
 

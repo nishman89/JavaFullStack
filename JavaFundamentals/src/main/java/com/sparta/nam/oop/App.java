@@ -63,27 +63,29 @@ public class App {
 //        }
 
 
-        int a = 1;
-        int b = 1;
-        System.out.println(a == b);
+//        int a = 1;
+//        int b = 1;
+//        System.out.println(a == b);
+//
+//        Member member1 = new Member("Nish", "Mandal", 2022,1,1);
+//        Member member2 = new Member("Nish", "Mandal", 2022,1,1);
+//        Member member3 = member1;
+//        System.out.println(member1.equals(member2));
+//        System.out.println(member1.equals(member3));
+//        System.out.println(member1.hashCode());
+//        System.out.println(member2.hashCode());
+//
+//
+//        HashSet<Member> members = new HashSet<>();
+//        members.add(member1);
+//        members.add(member2);
+//        HashSet<Integer> ints = new HashSet<>();
+//        ints.add(1);
+//        ints.add(1);
+//        ints.add(2);
+//        ints.add(3);
 
-        Member member1 = new Member("Nish", "Mandal", 2022,1,1);
-        Member member2 = new Member("Nish", "Mandal", 2022,1,1);
-        Member member3 = member1;
-        System.out.println(member1.equals(member2));
-        System.out.println(member1.equals(member3));
-        System.out.println(member1.hashCode());
-        System.out.println(member2.hashCode());
 
-
-        HashSet<Member> members = new HashSet<>();
-        members.add(member1);
-        members.add(member2);
-        HashSet<Integer> ints = new HashSet<>();
-        ints.add(1);
-        ints.add(1);
-        ints.add(2);
-        ints.add(3);
 
     }
 }

@@ -1,8 +1,11 @@
 package com.sparta.nam.oop;
 
 import javax.swing.plaf.metal.MetalMenuBarUI;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.Objects;
 
 public  class Member implements Printable, Movable {
@@ -75,4 +78,6 @@ public  class Member implements Printable, Movable {
     public int hashCode() {
         return Objects.hash(this.firstName, this.lastName, this.joinDate);
     }
+
+
 }
