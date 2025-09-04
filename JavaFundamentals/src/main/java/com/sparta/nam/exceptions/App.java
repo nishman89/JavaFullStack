@@ -1,9 +1,24 @@
 package com.sparta.nam.exceptions;
 
 import java.text.ParseException;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 public class App {
+
+    public static final Logger LOGGER = Logger.getLogger(com.sparta.nam.logging.App.class.getName());
+
     public static void main(String[] args) {
+
+        try {
+            FileHandler fileHandler = new FileHandler("src/main/resources/logFile2.log", true);
+            fileHandler.setFormatter(new SimpleFormatter());
+            LOGGER.addHandler(fileHandler);
+        } catch(Exception ex){
+            ex.printStackTrace();
+        }
 
 //        Integer[] ints = {1,2,3};
 
@@ -37,8 +52,14 @@ public class App {
 //        System.out.println("Program is finished");
 
 
+        try{
+            throw new RuntimeException();
+        } catch (Exception ex){
+            LOGGER.log(Level.SEVERE, "SEVERE Name cannot be null"); // highest
+        }
+
         try {
-            Animal myHamster = new Animal("Haashim", 2, "27-07-2022");
+            Animal myHamster = new Animal(null, 2, "27-07-2022");
             Animal myRabbit = new Animal("Vineer", 1, "27-07-2022");
             Animal myOtherDog = new Animal("Dayanna", 2, "27-07-2022");
             Animal myOtherCat = new Animal("Farah", 12, "27-07-2022");
@@ -48,8 +69,8 @@ public class App {
 
 
             catch (NullPointerException e) {
-                            System.out.println("Name cannot be null");
-                        }
+                System.out.println("Name cannot be null");
+            }
             catch (IllegalArgumentException e) {
                             System.out.println("Age cannot be negative");
                         }

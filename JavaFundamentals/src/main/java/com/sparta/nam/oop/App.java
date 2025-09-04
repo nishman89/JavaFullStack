@@ -5,9 +5,14 @@ import java.util.*;
 
 public class App {
     public static void main(String[] args) {
-//        Member m1 = new Member("Cathy", "French", 1990, 5, 15);
-//        Member m2 = new Member("Nish", "Mandal", 2025, 1, 20);
-//        Member noel = new Member("Noel", "Gallagher");
+        Member m1 = new Member("Cathy", "French", 1990, 5, 15);
+        Member m2 = new Member("Nish", "Mandal", 2025, 1, 20);
+        Member noel = new Member("Noel", "Gallagher");
+
+
+        List<Member> members = new ArrayList<>(List.of(noel,m1,m2));
+        members.stream().filter(mem -> mem.getMemberDays() > 600).toList();
+        System.out.println(members);
 //        System.out.println(m1.getFullName());
 //        System.out.println(m1.getMemberDays());
 //        System.out.println(m2.getFullName());
