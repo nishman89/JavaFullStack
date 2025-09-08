@@ -22,7 +22,7 @@ public class CustomerService {
 
     public Customer getCustomerByID(String id){
         if(id.length()>5){
-            throw  new IllegalArgumentException("Can't have ID longer than 5 chars");
+            throw  new IllegalArgumentException("Can't have ID longer than 5 characters");
         } else {
             return customerRepository.findById(id).orElse(null);
         }
@@ -30,5 +30,21 @@ public class CustomerService {
 
     public Customer saveCustomer(Customer customer){
         return customerRepository.save(customer);
+    }
+
+    public boolean deleteCustomerById(String id) {
+        if (customerRepository.existsById(id)) {
+            customerRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    public Customer updateCustomer(Customer customer) {
+        if (customerRepository.existsById(customer.getCustomerID())) {
+            return customerRepository.save(customer);
+        } else {
+            throw new IllegalArgumentException("Customer with ID " + customer.getCustomerID() + " does not exist.");
+        }
     }
 }
