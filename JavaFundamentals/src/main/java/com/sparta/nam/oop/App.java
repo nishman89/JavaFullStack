@@ -90,7 +90,21 @@ public class App {
 //        ints.add(2);
 //        ints.add(3);
 
+    var result = aMethod("Nish is the man", "Nish");
 
+    }
 
+    public static int aMethod(String one, String two)
+    {
+        int x = 0;
+        String[] result = one.split(" ");
+        for (String t : result)
+        {
+            if (t.startsWith(two))
+            {
+                x++;
+            }
+        }
+        return x;
     }
 }
