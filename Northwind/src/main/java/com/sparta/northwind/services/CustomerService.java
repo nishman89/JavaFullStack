@@ -1,9 +1,12 @@
 package com.sparta.northwind.services;
 
+import com.sparta.northwind.dtos.CustomerDTO;
+import com.sparta.northwind.dtos.CustomerMapper;
 import com.sparta.northwind.entities.Customer;
 import com.sparta.northwind.repositories.CustomerRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -12,15 +15,25 @@ import java.util.Optional;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final CustomerMapper customerMapper;
 
-    public CustomerService(CustomerRepository customerRepository){
+    public CustomerService(CustomerRepository customerRepository, CustomerMapper customerMapper){
         if (customerRepository == null) {
             throw new IllegalArgumentException("Repository cannot be null");
-        }this.customerRepository = customerRepository;
+        }
+        this.customerRepository = customerRepository;
+        this.customerMapper = customerMapper;
     }
 
-    public List<Customer> getAllCustomers(){
-        return customerRepository.findAll();
+    public List<CustomerDTO> getAllCustomers(){
+        //return customerRepository.findAll().stream().map(customerMapper::toDTO).toList();
+        List<Customer> customers = customerRepository.findAll();
+        List<CustomerDTO> customerDtos = new ArrayList<>();
+        for(Customer customer:customers){
+            CustomerDTO customerDTO = customerMapper.toDTO(customer);
+            customerDtos.add(customerDTO);
+        }
+        return  customerDtos;
     }
 
     public Customer getCustomerByID(String id){
@@ -32,7 +45,8 @@ public class CustomerService {
         if (customer == null) {
             throw new IllegalArgumentException("Customer cannot be null");
         }
-        return customerRepository.save(customer);    }
+        return customerRepository.save(customer);
+    }
 
     public boolean deleteCustomerById(String id) {
         if (customerRepository.existsById(id)) {
@@ -48,6 +62,5 @@ public class CustomerService {
         }
         return customerRepository.save(customer);
     }
-
 
 }

@@ -54,7 +54,6 @@ public class NorthwindApplication {
             System.out.println("Unsucessful delete");
         }
 
-
     }
 
 }
