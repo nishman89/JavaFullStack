@@ -18,12 +18,10 @@ public class CustomerController {
 
 
     private final CustomerService service;
-    private final CustomerMapper customerMapper;
 
-    public CustomerController(CustomerService service, CustomerMapper customerMapper){
+    public CustomerController(CustomerService service){
 
         this.service = service;
-        this.customerMapper =customerMapper;
     }
 
 
@@ -49,8 +47,7 @@ public class CustomerController {
     @Operation(summary = "Add a new customer", description = "Create a new customer in the database")
     @PostMapping
     public ResponseEntity<CustomerDTO> addCustomer(@RequestBody CustomerDTO customerDTO) {
-        Customer customer = customerMapper.toEntity(customerDTO);
-        CustomerDTO savedCustomer = service.saveCustomer(customer);
+        CustomerDTO savedCustomer = service.saveCustomer(customerDTO);
         return ResponseEntity.status(201).body(savedCustomer);
     }
 
@@ -58,9 +55,8 @@ public class CustomerController {
     @PutMapping("/{id}")
     public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable String id, @RequestBody CustomerDTO customerDTO) {
         customerDTO.setCustomerID(id);
-        Customer customer = customerMapper.toEntity(customerDTO);
         try {
-            CustomerDTO updatedCustomer = service.updateCustomer(customer);
+            CustomerDTO updatedCustomer = service.updateCustomer(customerDTO);
             return ResponseEntity.ok(updatedCustomer);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();

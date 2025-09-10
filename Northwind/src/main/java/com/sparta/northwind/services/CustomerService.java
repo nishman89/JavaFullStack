@@ -1,3 +1,4 @@
+// Service
 package com.sparta.northwind.services;
 
 import com.sparta.northwind.dtos.CustomerDTO;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 public class CustomerService {
@@ -18,22 +18,19 @@ public class CustomerService {
     private final CustomerMapper customerMapper;
 
     public CustomerService(CustomerRepository customerRepository, CustomerMapper customerMapper){
-        if (customerRepository == null) {
-            throw new IllegalArgumentException("Repository cannot be null");
-        }
+        if (customerRepository == null) throw new IllegalArgumentException("Repository cannot be null");
+        if (customerMapper == null) throw new IllegalArgumentException("Mapper cannot be null");
         this.customerRepository = customerRepository;
         this.customerMapper = customerMapper;
     }
 
     public List<CustomerDTO> getAllCustomers(){
-        //return customerRepository.findAll().stream().map(customerMapper::toDTO).toList();
         List<Customer> customers = customerRepository.findAll();
         List<CustomerDTO> customerDtos = new ArrayList<>();
-        for(Customer customer:customers){
-            CustomerDTO customerDTO = customerMapper.toDTO(customer);
-            customerDtos.add(customerDTO);
+        for (Customer customer : customers) {
+            customerDtos.add(customerMapper.toDTO(customer));
         }
-        return  customerDtos;
+        return customerDtos;
     }
 
     public CustomerDTO getCustomerById(String id) {
@@ -42,11 +39,13 @@ public class CustomerService {
         return customerMapper.toDTO(customer);
     }
 
-
-
-    public CustomerDTO saveCustomer(Customer customer) {
-        return customerMapper.toDTO(customerRepository.save(customer));
+    // Controller passes DTO; service maps + persists
+    public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
+        Customer entity = customerMapper.toEntity(customerDTO);
+        Customer saved = customerRepository.save(entity);
+        return customerMapper.toDTO(saved);
     }
+
     public boolean deleteCustomer(String id) {
         if (customerRepository.existsById(id)) {
             customerRepository.deleteById(id);
@@ -55,11 +54,13 @@ public class CustomerService {
         return false;
     }
 
-    public CustomerDTO updateCustomer(Customer customer) {
-        if (customerRepository.existsById(customer.getCustomerID())) {
-            return customerMapper.toDTO(customerRepository.save(customer));
-        } else {
-            throw new IllegalArgumentException("Customer with ID " + customer.getCustomerID() + " does not exist.");
+    public CustomerDTO updateCustomer(CustomerDTO customerDTO) {
+        String id = customerDTO.getCustomerID();
+        if (!customerRepository.existsById(id)) {
+            throw new NoSuchElementException("Customer with ID " + id + " does not exist.");
         }
+        Customer entity = customerMapper.toEntity(customerDTO);
+        Customer saved = customerRepository.save(entity);
+        return customerMapper.toDTO(saved);
     }
 }

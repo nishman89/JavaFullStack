@@ -1,6 +1,7 @@
 package com.sparta.northwind;
 
 import com.sparta.northwind.dtos.CustomerDTO;
+import com.sparta.northwind.dtos.CustomerMapper;
 import com.sparta.northwind.entities.Customer;
 import com.sparta.northwind.repositories.CustomerRepository;
 import com.sparta.northwind.services.CustomerService;
@@ -25,6 +26,7 @@ public class NorthwindApplication {
 //        }
 
         CustomerService customerService = context.getBean(CustomerService.class);
+        CustomerMapper customerMapper = context.getBean(CustomerMapper.class);
 
         // --- Create (save) ---
         String id = "MANDA"; // <=5 chars due to your validation
@@ -33,7 +35,7 @@ public class NorthwindApplication {
         nish.setCompanyName("Sparta Global");
         nish.setContactName("Nish Mandal");
         nish.setCity("London"); // optional, add more fields if your schema requires
-        customerService.saveCustomer(nish);
+        customerService.saveCustomer(customerMapper.toDTO(nish));
         System.out.println("Saved customer: " + id);
 
         // --- Get by ID ---
