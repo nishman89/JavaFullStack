@@ -1,6 +1,7 @@
 package com.sparta.northwind.controllers;
 
 import com.sparta.northwind.dtos.CustomerDTO;
+import com.sparta.northwind.dtos.CustomerMapper;
 import com.sparta.northwind.entities.Customer;
 import com.sparta.northwind.services.CustomerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,9 +18,12 @@ public class CustomerController {
 
 
     private final CustomerService service;
+    private final CustomerMapper customerMapper;
 
-    public CustomerController(CustomerService service){
+    public CustomerController(CustomerService service, CustomerMapper customerMapper){
+
         this.service = service;
+        this.customerMapper =customerMapper;
     }
 
 
@@ -30,12 +34,12 @@ public class CustomerController {
         return ResponseEntity.ok(customers);
     }
 
-    @Operation(summary = "Get customer by ID", description = "Retrieve a a customer from the database using their unique ID")
 
+    @Operation(summary = "Get a customer by ID", description = "Retrieve a customer from the database using their unique ID")
     @GetMapping("/{id}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable String id){
-        Customer customer = service.getCustomerByID(id);
-        if(customer != null){
+    public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable String id) {
+        CustomerDTO customer = service.getCustomerById(id);
+        if (customer != null) {
             return ResponseEntity.ok(customer);
         } else {
             return ResponseEntity.notFound().build();
@@ -44,27 +48,29 @@ public class CustomerController {
 
     @Operation(summary = "Add a new customer", description = "Create a new customer in the database")
     @PostMapping
-    public ResponseEntity<Customer> addCustomer(@RequestBody Customer customer){
-        Customer savedCustomer = service.saveCustomer(customer);
+    public ResponseEntity<CustomerDTO> addCustomer(@RequestBody CustomerDTO customerDTO) {
+        Customer customer = customerMapper.toEntity(customerDTO);
+        CustomerDTO savedCustomer = service.saveCustomer(customer);
         return ResponseEntity.status(201).body(savedCustomer);
     }
 
-    @Operation(summary = "Update a customer", description = "Modify an existing customer's details in the database")
+    @Operation(summary = "Update a customer", description = "Update an existing customer in the database")
     @PutMapping("/{id}")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable String id, @RequestBody Customer customer) {
-        customer.setCustomerID(id);
+    public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable String id, @RequestBody CustomerDTO customerDTO) {
+        customerDTO.setCustomerID(id);
+        Customer customer = customerMapper.toEntity(customerDTO);
         try {
-            Customer updatedCustomer = service.updateCustomer(customer);
+            CustomerDTO updatedCustomer = service.updateCustomer(customer);
             return ResponseEntity.ok(updatedCustomer);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    @Operation(summary = "Delete a customer", description = "Remove a customer from the database using their unique ID")
+    @Operation(summary = "Delete a customer", description = "Delete a customer from the database using their unique ID")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable String id) {
-        boolean deleted = service.deleteCustomerById(id);
+        boolean deleted = service.deleteCustomer(id);
         if (deleted) {
             return ResponseEntity.noContent().build();
         } else {

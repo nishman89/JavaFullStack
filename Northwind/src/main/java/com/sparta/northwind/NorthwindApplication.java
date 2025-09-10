@@ -1,5 +1,6 @@
 package com.sparta.northwind;
 
+import com.sparta.northwind.dtos.CustomerDTO;
 import com.sparta.northwind.entities.Customer;
 import com.sparta.northwind.repositories.CustomerRepository;
 import com.sparta.northwind.services.CustomerService;
@@ -36,15 +37,15 @@ public class NorthwindApplication {
         System.out.println("Saved customer: " + id);
 
         // --- Get by ID ---
-        Customer got = customerService.getCustomerByID(id);
+        CustomerDTO got = customerService.getCustomerById(id);
         System.out.println("Got by ID: " + got);
 
         // --- (Optional) Find all, to verify it’s there ---
-        customerService.getCustomerByID(id);
+        customerService.getCustomerById(id);
 
     // --- Delete with required message on failure ---
         try {
-            boolean deleted = customerService.deleteCustomerById(id);
+            boolean deleted = customerService.deleteCustomer(id);
             if (!deleted) {
                 System.out.println("Unsucessful delete");
             } else {

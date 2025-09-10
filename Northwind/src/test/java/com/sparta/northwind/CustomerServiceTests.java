@@ -13,40 +13,31 @@ import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
-public class CustomerServiceTests {
+import static org.hamcrest.Matchers.contains;
 
-    private final CustomerMapper customerMapper = Mockito.mock(CustomerMapper.class);
+class CustomerServiceTests {
+
     private final CustomerRepository mockRepository = Mockito.mock(CustomerRepository.class);
-    private CustomerService sut = new CustomerService(mockRepository,customerMapper);
-
-    // Dummies
-
-//    @Test
-//    @DisplayName("Ensure CustomerService is constructed correctly")
-//    public void constructServiceTest(){
-//        Assertions.assertInstanceOf(CustomerService.class, sut);
-//    }
-//
-//    @Test
-//    @DisplayName("Constructor should throw exception with null repository")
-//    public void constructorWtihNullRepositoryTest(){
-//        Assertions.assertThrows(IllegalArgumentException.class, () -> new CustomerService(null));
-//    }
-
-    // Stub: Test specfic behaviour
+    private final CustomerMapper customerMapper = Mockito.mock(CustomerMapper.class);
+    private final CustomerService sut = new CustomerService(mockRepository, customerMapper);
 
     @Test
-    @DisplayName("Get all customers test")
-    public void getAllCustomersTest(){
+    @DisplayName("Construct Service")
+    public void constructServiceTest(){
+        Assertions.assertInstanceOf(CustomerService.class, sut, "sut should be an instance of CustomerService");
+    }
+
+    @Test
+    @DisplayName("Get All Customers Test")
+    public void getAllCustomersTest() {
+
         // Arrange
         List<Customer> customers = new ArrayList<>();
         Customer customer1 = new Customer();
         customer1.setCustomerID("MANDA");
         Customer customer2 = new Customer();
-        customer2.setCustomerID("WINDR");
+        customer1.setCustomerID("WINDR");
         customers.add(customer1);
         customers.add(customer2);
 
@@ -57,112 +48,151 @@ public class CustomerServiceTests {
 
         Mockito.when(customerMapper.toDTO(customer1)).thenReturn(dto1);
         Mockito.when(customerMapper.toDTO(customer2)).thenReturn(dto2);
-        //// Define mock beahviour - create the STUB
+        // Define Mock Behaviours
         Mockito.when(mockRepository.findAll()).thenReturn(customers);
 
-        // Act
+        //Act
         List<CustomerDTO> result = sut.getAllCustomers();
-
-        // Assert
         Assertions.assertEquals(2, result.size());
-        Assertions.assertEquals(result.get(0).getCustomerID(), "MANDA");
-        Assertions.assertEquals(result.get(1).getCustomerID(), "WINDR");
+        Assertions.assertTrue(result.get(0).getCustomerID().equals("MANDA"));
+        Assertions.assertTrue(result.get(1).getCustomerID().equals("WINDR"));
+    }
+    @Test
+    @DisplayName("Get Customer Happy Path")
+    public void getCustomerTest() {
+        Customer customer = new Customer();
+        customer.setCustomerID("MANDA");
+        customer.setCity("Birmingham");
+        customer.setCompanyName("Sparta Global");
+        customer.setContactName("Nish Mandal");
+
+        CustomerDTO customerDto = new CustomerDTO();
+        customerDto.setCustomerID("MANDA");
+        customerDto.setCity("Birmingham");
+        customerDto.setCompanyName("Sparta Global");
+        customerDto.setContactName("Nish Mandal");
+
+        // Define mock behavior
+        Mockito.when(customerMapper.toDTO(customer)).thenReturn(customerDto);
+        Mockito.when(mockRepository.findById("MANDA")).thenReturn(java.util.Optional.of(customer));
+
+        // Act: Call the method under test
+        CustomerDTO result = sut.getCustomerById("MANDA");
+
+        // Assert: Verify the result
+        Assertions.assertNotNull(result, "Customer should not be null");
+        Assertions.assertEquals("MANDA", result.getCustomerID(), "Customer ID should match");
     }
 
-//
-//    @Test
-//    @DisplayName("Get Customer Happy Path")
-//    public void getAllCustomerTest(){
-//
-//        // Arrange
-//        Customer customer = new Customer();
-//        customer.setCustomerID("MANDA");
-//        customer.setCity("Birmingham");
-//        customer.setCompanyName("Sparta Global");
-//        customer.setContactName("Nish Mandal");
-//
-//        Mockito.when(mockRepository.findById("MANDA")).thenReturn(Optional.of(customer));
-//
-//        // Act
-//
-//        Customer result = sut.getCustomerByID("MANDA");
-//
-//        Assertions.assertNotNull(result, "Customer should not be null");
-//        Assertions.assertEquals("MANDA", result.getCustomerID(), "Customer ID should match");
-//
-//    }
-//
-//
-//    @Test
-//    @DisplayName("Get Customer Unhappy Path")
-//    public void findCustomerUnhappyPathTests(){
-//        Mockito.when(mockRepository.findById(Mockito.anyString())).thenReturn(Optional.empty());
-//        Assertions.assertThrows(NoSuchElementException.class, () -> sut.getCustomerByID("ABCDE"));
-//    }
-//
-//    @Test
-//    @DisplayName("Save Customer Happy Path")
-//    public void saveCustomerHappyPathTest() {
-//        Customer customer = new Customer();
-//        customer.setCustomerID("MANDA");
-//        customer.setCity("Birmingham");
-//        customer.setCompanyName("Sparta Global");
-//        customer.setContactName("Nish Mandal");
-//
-//        Mockito.when(mockRepository.save(customer)).thenReturn(customer);
-//
-//        Customer savedCustomer = sut.saveCustomer(customer);
-//
-//        Assertions.assertNotNull(savedCustomer, "The saved customer should not be null");
-//        Assertions.assertEquals("MANDA", savedCustomer.getCustomerID(), "Customer ID should match");
-//    }
-//
-//    @Test
-//    @DisplayName("Save Customer Unhappy Path")
-//    public void saveCustomerUnhappyPathTest() {
-//        Assertions.assertThrows(IllegalArgumentException.class, () -> sut.saveCustomer(null),
-//                "Expected IllegalArgumentException when saving a null customer");
-//    }
-//
-//    @Test
-//    @DisplayName("Update Customer Happy Path")
-//    public void updateCustomerHappyPathTest() {
-//        Customer customer = new Customer();
-//        customer.setCustomerID("MANDA");
-//
-//        Mockito.when(mockRepository.existsById("MANDA")).thenReturn(true);
-//        Mockito.when(mockRepository.save(customer)).thenReturn(customer);
-//
-//        Customer updatedCustomer = sut.updateCustomer(customer);
-//
-//        Assertions.assertNotNull(updatedCustomer, "Updated customer should not be null");
-//        Assertions.assertEquals("MANDA", updatedCustomer.getCustomerID(), "Customer ID should match");
-//    }
-//
-//    @Test
-//    @DisplayName("Update Customer Unhappy Path")
-//    public void updateCustomerUnhappyPathTest() {
-//        Customer customer = new Customer();
-//        customer.setCustomerID("MANDA");
-//
-//        Mockito.when(mockRepository.existsById("MANDA")).thenReturn(false);
-//
-//        Assertions.assertThrows(IllegalArgumentException.class, () -> sut.updateCustomer(customer),
-//                "Expected IllegalArgumentException when updating a non-existent customer");
-//    }
-//
-//
-//    @Test
-//    @DisplayName("Save customer happy path")
-//    public void saveCustomerHappyPath(){
-//        Customer customer = new Customer();
-//        customer.setCustomerID("NISHY");
-//        Mockito.when(mockRepository.save(customer)).thenReturn(customer);
-//
-//        Customer savedCustomer = sut.saveCustomer(customer);
-//
-//        Mockito.verify(mockRepository, Mockito.atLeast(1)).save(customer);
-//    }
 
 
+    @Test
+    @DisplayName("Get Customer Unhappy Path")
+    public void findCustomerUnhappyPathTest() {
+        // arrange
+        Mockito.when(mockRepository.findById(Mockito.anyString())).thenReturn(null);
+        // act and assert
+        Assertions.assertThrows(NullPointerException.class, () -> sut.getCustomerById("MANDA"));
+    }
+
+
+    @Test
+    @DisplayName("Save Customer — Happy Path")
+    void saveCustomerHappyPathTest() {
+        // Arrange: entity in, repo returns saved entity, mapper returns DTO
+        Customer customer = new Customer();
+        customer.setCustomerID("MANDA");
+        customer.setCity("Birmingham");
+        customer.setCompanyName("Sparta Global");
+        customer.setContactName("Nish Mandal");
+
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setCustomerID("MANDA");
+
+        Mockito.when(mockRepository.save(customer)).thenReturn(customer);
+        Mockito.when(customerMapper.toDTO(customer)).thenReturn(customerDTO);
+
+        // Act
+        CustomerDTO savedCustomer = sut.saveCustomer(customer);
+
+        // Assert
+        Assertions.assertNotNull(savedCustomer, "The saved customer should not be null");
+        Assertions.assertEquals("MANDA", savedCustomer.getCustomerID(), "Customer ID should match");
+
+        // Verify interactions
+        Mockito.verify(mockRepository).save(customer);
+        Mockito.verify(customerMapper).toDTO(customer);
+        Mockito.verifyNoMoreInteractions(mockRepository, customerMapper);
+    }
+
+    @Test
+    @DisplayName("Update Customer — Happy Path")
+    void updateCustomerHappyPathTest() {
+        // Arrange
+        Customer customer = new Customer();
+        customer.setCustomerID("MANDA");
+        customer.setCity("Birmingham");
+        customer.setCompanyName("Sparta Global");
+        customer.setContactName("Nish Mandal");
+
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setCustomerID("MANDA");
+
+        Mockito.when(mockRepository.existsById("MANDA")).thenReturn(true);
+        Mockito.when(mockRepository.save(customer)).thenReturn(customer);
+        Mockito.when(customerMapper.toDTO(customer)).thenReturn(customerDTO);
+
+        // Act
+        CustomerDTO updatedCustomer = sut.updateCustomer(customer);
+
+        // Assert
+        Assertions.assertNotNull(updatedCustomer, "Updated customer should not be null");
+        Assertions.assertEquals("MANDA", updatedCustomer.getCustomerID(), "Customer ID should match");
+
+        // Verify interactions
+        Mockito.verify(mockRepository).existsById("MANDA");
+        Mockito.verify(mockRepository).save(customer);
+        Mockito.verify(customerMapper).toDTO(customer);
+        Mockito.verifyNoMoreInteractions(mockRepository, customerMapper);
+    }
+
+
+    @Test
+    @DisplayName("Update Customer Unhappy Path")
+    public void updateCustomerUnhappyPathTest() {
+        Customer customer = new Customer();
+        customer.setCustomerID("MANDA");
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setCustomerID("MANDA");
+
+        Mockito.when(mockRepository.save(customer)).thenReturn(customer);
+        Mockito.when(customerMapper.toEntity(customerDTO)).thenReturn(customer);
+        Mockito.when(customerMapper.toDTO(customer)).thenReturn(customerDTO);;
+
+        Assertions.assertThrows(IllegalArgumentException.class, () -> sut.updateCustomer(customer),
+                "Expected IllegalArgumentException when updating a non-existent customer");
+    }
+
+
+    @Test
+    @DisplayName("Delete Customer Happy Path")
+    public void deleteCustomerHappyPathTest() {
+        Mockito.when(mockRepository.existsById("MANDA")).thenReturn(true);
+
+        boolean result = sut.deleteCustomer("MANDA");
+
+        Assertions.assertTrue(result, "The customer should be deleted successfully");
+        Mockito.verify(mockRepository, Mockito.times(1)).deleteById("MANDA");
+    }
+
+    @Test
+    @DisplayName("Delete Customer Unhappy Path")
+    public void deleteCustomerUnhappyPathTest() {
+        Mockito.when(mockRepository.existsById("MANDA")).thenReturn(false);
+
+        boolean result = sut.deleteCustomer("MANDA");
+
+        Assertions.assertFalse(result, "The customer should not be deleted as it does not exist");
+        Mockito.verify(mockRepository, Mockito.never()).deleteById("MANDA");
+    }
 }

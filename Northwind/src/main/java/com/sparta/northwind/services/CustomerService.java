@@ -36,19 +36,18 @@ public class CustomerService {
         return  customerDtos;
     }
 
-    public Customer getCustomerByID(String id){
-        return customerRepository.findById(id)
+    public CustomerDTO getCustomerById(String id) {
+        Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Customer not found"));
+        return customerMapper.toDTO(customer);
     }
 
-    public Customer saveCustomer(Customer customer){
-        if (customer == null) {
-            throw new IllegalArgumentException("Customer cannot be null");
-        }
-        return customerRepository.save(customer);
-    }
 
-    public boolean deleteCustomerById(String id) {
+
+    public CustomerDTO saveCustomer(Customer customer) {
+        return customerMapper.toDTO(customerRepository.save(customer));
+    }
+    public boolean deleteCustomer(String id) {
         if (customerRepository.existsById(id)) {
             customerRepository.deleteById(id);
             return true;
@@ -56,11 +55,11 @@ public class CustomerService {
         return false;
     }
 
-    public Customer updateCustomer(Customer customer) {
-        if (!customerRepository.existsById(customer.getCustomerID())) {
-            throw new IllegalArgumentException("Customer does not exist");
+    public CustomerDTO updateCustomer(Customer customer) {
+        if (customerRepository.existsById(customer.getCustomerID())) {
+            return customerMapper.toDTO(customerRepository.save(customer));
+        } else {
+            throw new IllegalArgumentException("Customer with ID " + customer.getCustomerID() + " does not exist.");
         }
-        return customerRepository.save(customer);
     }
-
 }
